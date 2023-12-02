@@ -78,6 +78,7 @@ fn tree_solve(trees: &Vec<Vec<char>>, x: isize, y: isize) -> bool {
     return false;
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day08.txt");
     let mut trees: Vec<Vec<char>> = Vec::new();

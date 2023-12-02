@@ -98,6 +98,7 @@ impl Monke {
     }
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day11.txt");
     let mut monkes: Vec<Monke> = Vec::new();

@@ -36,6 +36,7 @@ impl Point {
     }
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day09.txt");
     let mut head = Point::new(0, 0);

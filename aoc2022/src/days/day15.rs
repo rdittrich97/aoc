@@ -32,6 +32,7 @@ fn range(p1: &Point, p2: &Point) -> isize {
     return mdist.x + mdist.y;
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day15.txt");
     //let mut lpos: HashSet<isize> = HashSet::new();

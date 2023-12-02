@@ -137,6 +137,7 @@ fn sort(packets: &mut Vec<EPacket>, div1: usize, div2: usize) -> (usize, usize) 
     return (d1, d2);
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day13.txt");
     let mut first = true;

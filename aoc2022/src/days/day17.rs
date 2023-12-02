@@ -160,6 +160,7 @@ fn fast_compact_1d(tetris: &mut [char; WIDTH * MAX_SIZE], mins: usize, max: usiz
     tetris[..(m - mins) * WIDTH].clone_from_slice(&temp);
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day17.txt");
     let mut iter: usize = 0;

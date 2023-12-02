@@ -76,6 +76,7 @@ fn dum(
     return (res + time * tunnels[node].flow, node.clone() + &pp);
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day16.txt");
     let mut tunnels: HashMap<String, Valve> = HashMap::new();

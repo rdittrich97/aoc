@@ -152,6 +152,7 @@ fn solver(map: &Vec<Vec<char>>, start: Point, end: Point) -> Option<isize> {
     return Some(distances[end.x as usize][end.y as usize]);
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day12.txt");
     let mut map: Vec<Vec<char>> = Vec::new();

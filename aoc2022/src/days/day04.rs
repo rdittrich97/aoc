@@ -8,6 +8,7 @@ fn read_file(path: &str) -> io::BufReader<fs::File> {
     return io::BufReader::new(file);
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day04.txt");
     let mut epairs: [isize; 4] = [0; 4];

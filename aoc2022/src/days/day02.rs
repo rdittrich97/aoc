@@ -87,6 +87,7 @@ impl Game {
         return s1;
     }
 }
+#[allow(dead_code)]
 pub fn solve() {
     let strats = fs::read_to_string("./src/days/day02.txt").expect("Error in reading the file");
     let mut pts: usize = 0;

@@ -1,5 +1,6 @@
 use std::fs;
 
+#[allow(dead_code)]
 pub fn solve() {
     let cals = fs::read_to_string("./src/days/day01.txt").expect("Error in reading the file");
     let elves: Vec<&str> = cals.split("\n\n").collect();

@@ -72,6 +72,7 @@ fn move_sandp2(sand: &Point, map: &Vec<Vec<char>>) -> Option<(isize, isize)> {
     return None;
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day14.txt");
     let mut maxx: usize = 0;

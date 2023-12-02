@@ -12,6 +12,7 @@ fn idx_fc(c: &char) -> usize {
     }
 }
 
+#[allow(dead_code)]
 pub fn solve() {
     let file = fs::File::open("./src/days/day03.txt").unwrap();
     let reader = io::BufReader::new(file);

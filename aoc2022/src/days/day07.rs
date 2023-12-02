@@ -61,6 +61,7 @@ fn parse(lines: Vec<&str>, dirs: &mut HashMap<String, usize>) -> usize {
     return rparse(&lines, dirs, &p.to_string(), 1);
 }
  */
+#[allow(dead_code)]
 pub fn solve() {
     let reader = read_file("./src/days/day07.txt");
 
