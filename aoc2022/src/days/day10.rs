@@ -1,7 +1,7 @@
 use std::{
-    collections::{HashMap, HashSet, VecDeque},
+    collections::VecDeque,
     fs,
-    io::{self, BufRead, BufReader, Read},
+    io::{self, BufRead},
 };
 
 fn read_file(path: &str) -> io::BufReader<fs::File> {
@@ -15,8 +15,6 @@ pub fn solve() {
     let mut x = 1;
     let mut adds: VecDeque<isize> = VecDeque::new();
     let mut ll: isize = 0;
-    let mut tot: isize = 0;
-    let mut ss: isize;
     let mut lm: isize;
     for line in reader.lines() {
         match line {

@@ -2,7 +2,7 @@ use itertools::Itertools;
 use std::{
     collections::{HashMap, HashSet, VecDeque},
     fs,
-    io::{self, BufRead, BufReader, Read},
+    io::{self, BufRead},
     vec,
 };
 
@@ -112,8 +112,6 @@ pub fn solve() {
         }
     }
 
-    let mut res: Vec<(String, isize)> = Vec::new();
-    let mut time_left: isize = 30;
     let tunns: Vec<_> = tunnels.keys().map(|k| k.clone()).collect();
     for tunnel in &tunns {
         let mut res = HashMap::new();

@@ -1,15 +1,13 @@
 use std::{
-    collections::{HashMap, HashSet},
+    collections::HashSet,
     fs,
-    io::{self, BufRead, BufReader, Read},
+    io::{self, BufRead},
 };
 
 fn read_file(path: &str) -> io::BufReader<fs::File> {
     let file = fs::File::open(path).unwrap();
     return io::BufReader::new(file);
 }
-
-const DIRECTIONS: [(isize, isize); 4] = [(0, 1), (0, -1), (1, 0), (-1, 0)];
 
 #[derive(Debug, PartialEq, Hash, Eq, Clone, Copy)]
 struct Point {
@@ -49,7 +47,6 @@ pub fn solve() {
                 let toks: Vec<_> = l.split_whitespace().collect();
                 let dir = toks[0];
                 let mvs = toks[1].parse::<usize>().unwrap();
-                //println!("== {dir} {mvs} ==");
                 for _ in 0..mvs {
                     /*                     for i in (-160..110).rev() {
                         for j in -30..310 {
@@ -90,6 +87,5 @@ pub fn solve() {
     }
     pos.insert(tails[8].clone());
 
-    //println!("{:?}", pos);
     println!("{:?}", pos.len());
 }

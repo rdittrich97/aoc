@@ -1,7 +1,7 @@
 use std::{
-    collections::{HashMap, HashSet, VecDeque},
+    collections::HashSet,
     fs,
-    io::{self, BufRead, BufReader, Read},
+    io::{self, BufRead},
 };
 
 fn read_file(path: &str) -> io::BufReader<fs::File> {
@@ -38,6 +38,7 @@ pub fn solve() {
     //let mut lpos: HashSet<isize> = HashSet::new();
     let mut lpos: HashSet<Point> = HashSet::new();
     let target = 2000000;
+
     //let max = 20;
     let min = 0;
     let max = 4000000;
