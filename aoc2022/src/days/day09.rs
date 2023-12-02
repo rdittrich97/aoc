@@ -30,7 +30,7 @@ impl Point {
         self.y += diffy.clamp(-1, 1);
     }
     fn new(x: isize, y: isize) -> Self {
-        return Point { x: x, y: y };
+        return Point { x, y };
     }
 }
 
@@ -63,7 +63,7 @@ pub fn solve() {
                         println!("");
                     }
                     println!(); */
-                    pos.insert(tails[8].clone());
+                    pos.insert(tails[8]);
                     if dir == "R" {
                         head.lead(1, 0);
                     } else if dir == "L" {
@@ -85,7 +85,7 @@ pub fn solve() {
             }
         }
     }
-    pos.insert(tails[8].clone());
+    pos.insert(tails[8]);
 
     println!("{:?}", pos.len());
 }

@@ -39,10 +39,10 @@ pub fn solve() {
                 }
                 */
             }
-            Err(err) => println!("{:?}", err),
+            Err(err) => println!("{err:?}"),
         }
     }
-    println!("{:?}", total)
+    println!("{total:?}");
 }
 
 // vJrwpWtwJgWr hcsFMMfFFhFp

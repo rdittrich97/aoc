@@ -25,7 +25,7 @@ fn calc_steps(
     q: &mut VecDeque<(String, isize)>,
     res: &mut HashMap<String, isize>,
 ) {
-    if q.len() == 0 {
+    if q.is_empty() {
         return;
     }
 
@@ -34,7 +34,7 @@ fn calc_steps(
     mem.insert(next.clone());
     for lead in &tunnels
         .get(&next)
-        .expect(format!("Unable to get {}", next).as_str())
+        .unwrap_or_else(|| panic!("Unable to get {next}"))
         .leads
     {
         if !mem.contains(lead) {
@@ -52,9 +52,9 @@ fn dum(
     opts: &HashSet<String>,
 ) -> (isize, String) {
     let mut res = 0;
-    let mut pp = "".to_owned();
+    let mut pp = String::new();
     if time <= 0 {
-        return (0, "".to_owned());
+        return (0, String::new());
     }
     for lead in opts.difference(mem) {
         let mut mn: HashSet<_> = HashSet::new();
@@ -70,7 +70,7 @@ fn dum(
         );
         if t > res {
             res = t;
-            pp = p.to_owned();
+            pp = p.clone();
         }
     }
     return (res + time * tunnels[node].flow, node.clone() + &pp);
@@ -89,18 +89,18 @@ pub fn solve() {
                     .replace(" has flow rate=", ",")
                     .replace("; tunnels lead to valves ", ",")
                     .replace("; tunnel leads to valve ", ",")
-                    .replace(" ", "")
-                    .split(",")
-                    .map(|s| s.to_string())
+                    .replace(' ', "")
+                    .split(',')
+                    .map(std::string::ToString::to_string)
                     .collect();
                 tunnels.insert(
                     x[0].clone(),
                     Valve {
-                        id: x[0].to_owned(),
+                        id: x[0].clone(),
                         flow: x[1].parse().unwrap(),
                         leads: x[2..x.len()]
                             .iter()
-                            .map(|s| s.to_string())
+                            .map(std::string::ToString::to_string)
                             .collect::<Vec<String>>(),
                         distances: HashMap::new(),
                     },
@@ -112,7 +112,7 @@ pub fn solve() {
         }
     }
 
-    let tunns: Vec<_> = tunnels.keys().map(|k| k.clone()).collect();
+    let tunns: Vec<_> = tunnels.keys().map(std::clone::Clone::clone).collect();
     for tunnel in &tunns {
         let mut res = HashMap::new();
         calc_steps(
@@ -121,7 +121,7 @@ pub fn solve() {
             &mut VecDeque::from(vec![(tunnel.clone(), 1)]),
             &mut res,
         );
-        tunnels.get_mut(tunnel).unwrap().distances = res.to_owned();
+        tunnels.get_mut(tunnel).unwrap().distances = res.clone();
         res.clear();
     }
     let options: HashSet<String> = tunnels
@@ -129,34 +129,36 @@ pub fn solve() {
         .filter(|(_, v)| v.flow > 0)
         .map(|(k, _)| k.clone())
         .collect();
-    println!("{:?}", tunnels);
+    println!("{tunnels:?}");
 
     let tmp = tunnels.clone();
-    for (k, v) in tmp.iter() {
-        for (n, d) in v.distances.iter() {
+    for (k, v) in &tmp {
+        for (n, d) in &v.distances {
             if *d < tunnels[n].distances[k] {
                 tunnels.get_mut(n).unwrap().distances.insert(k.clone(), *d);
             }
         }
     }
-    let x = dum(&tunnels, &mut HashSet::new(), &start, 30, &options);
-    println!("{:?}", x);
+    let x = dum(&tunnels, &HashSet::new(), &start, 30, &options);
+    println!("{x:?}");
 
     let mut tot = 0;
     for i in 1..options.len() / 2 {
         println!("{i}");
         for c in options.iter().combinations(i) {
-            let os = c.into_iter().map(|s| s.to_string()).collect::<HashSet<_>>();
-            let s1 = dum(&tunnels, &mut HashSet::new(), &start, 26, &os);
+            let os = c
+                .into_iter()
+                .map(std::string::ToString::to_string)
+                .collect::<HashSet<_>>();
+            let s1 = dum(&tunnels, &HashSet::new(), &start, 26, &os);
             let s2 = dum(
                 &tunnels,
-                &mut HashSet::new(),
+                &HashSet::new(),
                 &start,
                 26,
                 &(options
                     .difference(&os)
-                    .into_iter()
-                    .map(|s| s.to_string())
+                    .map(std::string::ToString::to_string)
                     .collect::<HashSet<_>>()),
             );
             if s1.0 + s2.0 > tot {

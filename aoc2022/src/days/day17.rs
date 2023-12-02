@@ -162,8 +162,8 @@ fn fast_compact_1d(tetris: &mut [char; WIDTH * MAX_SIZE], mins: usize, max: usiz
 pub fn solve() {
     let reader = read_file("./src/days/day17.txt");
     let mut iter: usize = 0;
-    let mut foo: [char; WIDTH * MAX_SIZE] = ['.'; WIDTH * MAX_SIZE];
-    //let mut foo: [[char; WIDTH]; MAX_SIZE] = [['.'; WIDTH]; MAX_SIZE];
+    let mut board: [char; WIDTH * MAX_SIZE] = ['.'; WIDTH * MAX_SIZE];
+    //let mut board: [[char; WIDTH]; MAX_SIZE] = [['.'; WIDTH]; MAX_SIZE];
 
     let mut mins: [usize; WIDTH] = [0; WIDTH];
     let mut curr = Shapes::Hline;
@@ -171,7 +171,7 @@ pub fn solve() {
     let mut tmax: usize = 0;
     let mves = reader.lines().exactly_one().unwrap().unwrap();
     let moves: Vec<_> = mves.chars().collect();
-    println!("{:?}", moves);
+    println!("{moves:?}");
     let mut s: &[Point];
     let mut mv: usize = 0;
     let start = Instant::now();
@@ -200,7 +200,7 @@ pub fn solve() {
                 s = SQUARE.as_slice();
             }
         }
-        let mut offsety = max as isize + 4;
+        let mut offsety = max + 4;
         let mut offsetx = 0;
         /*
         loop {
@@ -242,18 +242,14 @@ pub fn solve() {
         }
         */
         loop {
-            if moves[mv] == '>' {
-                if can_move_1d(s, 1, 0, offsetx, offsety, &foo) {
-                    offsetx += 1;
-                }
-            } else if moves[mv] == '<' {
-                if can_move_1d(s, -1, 0, offsetx, offsety, &foo) {
-                    offsetx -= 1;
-                }
+            if moves[mv] == '>' && can_move_1d(s, 1, 0, offsetx, offsety, &board) {
+                offsetx += 1;
+            } else if moves[mv] == '<' && can_move_1d(s, -1, 0, offsetx, offsety, &board) {
+                offsetx -= 1;
             }
             mv = (mv + 1) % moves.len();
 
-            if can_move_1d(s, 0, -1, offsetx, offsety, &foo) {
+            if can_move_1d(s, 0, -1, offsetx, offsety, &board) {
                 offsety -= 1;
             } else {
                 break;
@@ -265,16 +261,16 @@ pub fn solve() {
             mins[(p.x as isize + offsetx) as usize] =
                 mins[(p.x as isize + offsetx) as usize].max((p.y as isize + offsety) as usize);
         }); */
-        s.iter().for_each(|p| {
-            foo[(p.y as isize + offsety) as usize * WIDTH + (p.x as isize + offsetx) as usize] =
+        for p in s.iter() {
+            board[(p.y as isize + offsety) as usize * WIDTH + (p.x as isize + offsetx) as usize] =
                 '#';
             mins[(p.x as isize + offsetx) as usize] =
                 mins[(p.x as isize + offsetx) as usize].max((p.y as isize + offsety) as usize);
-        });
+        }
 
         if max > (MAX_SIZE - 500) as isize {
             let lm = *mins.iter().min().unwrap();
-            fast_compact_1d(&mut foo, lm, max as usize);
+            fast_compact_1d(&mut board, lm, max as usize);
             mins.iter_mut().for_each(|m| *m -= lm);
             max -= lm as isize;
             tmax += lm;
@@ -284,30 +280,27 @@ pub fn solve() {
             let elapsed = start.elapsed();
             let iters_per_sec = iter / (elapsed.as_secs() as usize).max(1);
             let time_left = (total_iters - iter) as f64 / iters_per_sec as f64;
-            println!("Iterations per sec: {}", iters_per_sec);
-            println!("Total iters: {}", iter);
+            println!("Iterations per sec: {iters_per_sec}");
+            println!("Total iters: {iter}");
             let duration = time_left as usize;
             let days = duration / 86400;
             let hours = (duration % 86400) / 3600;
             let minutes = (duration % 3600) / 60;
             let seconds = duration % 60;
             println!(
-                "Time left: {:02}:{:02}:{:02}:{:02}  - {:.2?} elapsed",
-                days, hours, minutes, seconds, elapsed
+                "Time left: {days:02}:{hours:02}:{minutes:02}:{seconds:02}  - {elapsed:.2?} elapsed",
             );
         }
     }
-    let mut i = 0;
-    for row in foo[0..(max as usize) * WIDTH].iter().rev() {
+    for (i, row) in board[0..(max as usize) * WIDTH].iter().rev().enumerate() {
         if i % WIDTH == 0 {
-            println!("");
+            println!();
         }
-        print!("{:?}", row);
-        i += 1;
+        print!("{row:?}");
     }
-    println!("");
-    println!("{:?}", max);
-    println!("{:?}", tmax);
+    println!();
+    println!("{max:?}");
+    println!("{tmax:?}");
     println!("{:?}", max + 1);
     println!("{:?}", tmax + max as usize + 1);
 }

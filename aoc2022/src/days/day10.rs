@@ -23,26 +23,26 @@ pub fn solve() {
                 let op = toks[0];
                 lm = ll % 40;
                 if lm == 0 {
-                    println!("");
+                    println!();
                 }
                 if x - 1 <= lm && lm <= x + 1 {
                     print!("#");
                 } else {
-                    print!(".")
+                    print!(".");
                 }
-                adds.pop_front().map(|v| {
+                if let Some(v) = adds.pop_front() {
                     ll += 1;
                     x += v;
                     lm = ll % 40;
                     if lm == 0 {
-                        println!("");
+                        println!();
                     }
                     if x - 1 <= lm && lm <= x + 1 {
                         print!("#");
                     } else {
-                        print!(".")
+                        print!(".");
                     }
-                });
+                }
 
                 if op == "noop" {
                 } else if op == "addx" {
@@ -79,5 +79,5 @@ pub fn solve() {
             }
         }
     }
-    println!("");
+    println!();
 }

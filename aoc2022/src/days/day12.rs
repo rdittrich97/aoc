@@ -1,7 +1,7 @@
 use std::{
-    collections::{VecDeque},
+    collections::VecDeque,
     fs,
-    io::{self, BufRead, Read},
+    io::{self, BufRead},
 };
 
 fn read_file(path: &str) -> io::BufReader<fs::File> {
@@ -16,7 +16,7 @@ struct Point {
 }
 impl Point {
     fn new(x: isize, y: isize) -> Self {
-        return Point { x: x, y: y };
+        return Point { x, y };
     }
 }
 
@@ -35,23 +35,22 @@ fn rc_path(
     if val.is_none() {
         return None;
     }
-    if seen[x as usize][y as usize] == true {
+    if seen[x as usize][y as usize] {
         return None;
     }
-    let mut ch = val.unwrap().clone();
+    let mut ch = *val.unwrap();
     if ch == 'E' {
         return Some(len + 1);
     }
-    let prevv;
     if ch == 'S' {
         ch = 'a';
     }
     let chv = ch as usize;
-    if prev == 'S' {
-        prevv = 'a' as usize;
+    let prevv = if prev == 'S' {
+        'a' as usize
     } else {
-        prevv = prev as usize;
-    }
+        prev as usize
+    };
     if chv > prevv + 1 || chv < prevv - 1 {
         return None;
     }
@@ -72,30 +71,25 @@ fn find_path(map: &Vec<Vec<char>>, x: isize, y: isize) -> Option<usize> {
     let mut path = VecDeque::new();
     let t = rc_path(map, *prev, x, y, 1, &mut seen, &mut path);
     let mut s = std::iter::repeat('.').take(45).collect::<String>();
-    let mut i = 0;
-    for p in &path {
+    for (i, p) in path.iter().enumerate() {
         let idx = (p.y * 5 + p.x) as usize;
-        s.replace_range(idx..idx + 1, format!("{}", (i + 65 as u8) as char).as_str());
-        i += 1;
+        s.replace_range(idx..=idx, format!("{}", (i as u8 + 65_u8) as char).as_str());
     }
 
     return t;
 }
 
-fn can_move(map: &Vec<Vec<char>>, x: isize, y: isize, ox: isize, oy: isize) -> bool {
+fn can_move(map: &[Vec<char>], x: isize, y: isize, ox: isize, oy: isize) -> bool {
     let val = map.get(x as usize).and_then(|t| t.get(y as usize));
     if val.is_none() {
         return false;
     }
-    let pre = map
-        .get(ox as usize)
-        .and_then(|t| t.get(oy as usize))
-        .clone();
+    let pre = map.get(ox as usize).and_then(|t| t.get(oy as usize));
     if pre.is_none() {
         return false;
     }
-    let mut ch = val.unwrap().clone();
-    let prev = pre.unwrap().clone();
+    let mut ch = *val.unwrap();
+    let prev = *pre.unwrap();
     let prevv;
     if ch == 'S' {
         ch = 'a';
@@ -116,11 +110,11 @@ fn can_move(map: &Vec<Vec<char>>, x: isize, y: isize, ox: isize, oy: isize) -> b
     return true;
 }
 
-fn solver(map: &Vec<Vec<char>>, start: Point, end: Point) -> Option<isize> {
+fn solver(map: &Vec<Vec<char>>, start: Point, end: Point) -> isize {
     let mut que: VecDeque<Point> = VecDeque::new();
     que.push_front(start);
     let n = map.len();
-    let m = map.get(0).and_then(|x| Some(x.len())).unwrap();
+    let m = map.get(0).map(std::vec::Vec::len).unwrap();
     let mut distances: Vec<Vec<isize>> = vec![vec![-1; m]; n];
     distances[start.x as usize][start.y as usize] = 0;
     while let Some(pp) = que.pop_front() {
@@ -143,13 +137,13 @@ fn solver(map: &Vec<Vec<char>>, start: Point, end: Point) -> Option<isize> {
                 && can_move(map, nx, ny, pp.x, pp.y)
             {
                 distances[nx as usize][ny as usize] = distances[pp.x as usize][pp.y as usize] + 1;
-                que.push_front(Point::new(nx, ny))
+                que.push_front(Point::new(nx, ny));
             }
         }
     }
 
     println!("{:?}", distances[end.x as usize][end.y as usize]);
-    return Some(distances[end.x as usize][end.y as usize]);
+    return distances[end.x as usize][end.y as usize];
 }
 
 #[allow(dead_code)]
@@ -181,17 +175,16 @@ pub fn solve() {
             }
         }
     }
-    println!("{:?}", start);
-    println!("{:?}", map);
+    println!("{start:?}");
+    println!("{map:?}");
     println!("{:?}", find_path(&map, start.x, start.y));
     solver(&map, start, end);
     let mut min = 1000;
     for a in &aas {
-        if let Some(v) = solver(&map, *a, end) {
-            if v != -1 && v < min {
-                min = v;
-            }
+        let v = solver(&map, *a, end);
+        if v != -1 && v < min {
+            min = v;
         }
     }
-    println!("{:?}", min);
+    println!("{min:?}");
 }

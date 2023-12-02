@@ -1,7 +1,6 @@
 use std::{
-    collections::HashMap,
     fs,
-    io::{self, BufRead, BufReader, Read},
+    io::{self, BufRead},
 };
 
 fn read_file(path: &str) -> io::BufReader<fs::File> {
@@ -60,7 +59,7 @@ fn tree_solve2(trees: &Vec<Vec<char>>, x: isize, y: isize) -> usize {
     let mut total = 1;
     for (dx, dy) in DIRECTIONS {
         let t = rc_solve2(trees, *tree, x + dx, y + dy, (dx, dy), 1);
-        total *= t
+        total *= t;
     }
     return total;
 }
@@ -127,5 +126,5 @@ pub fn solve() {
             }
         }
     }
-    println!("{:?}", count)
+    println!("{count:?}");
 }

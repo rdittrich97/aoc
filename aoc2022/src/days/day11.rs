@@ -1,5 +1,5 @@
 use std::{
-    collections::{VecDeque},
+    collections::VecDeque,
     fs,
     io::{self, BufRead},
 };
@@ -54,11 +54,7 @@ impl Test {
         return self.neg;
     }
     fn new(pos: usize, neg: usize, disc: isize) -> Self {
-        return Self {
-            pos: pos,
-            neg: neg,
-            disc: disc,
-        };
+        return Self { pos, neg, disc };
     }
 }
 
@@ -73,9 +69,9 @@ struct Monke {
 impl Monke {
     fn new(items: VecDeque<isize>, operation: Op, test: Test) -> Self {
         return Monke {
-            items: items,
-            operation: operation,
-            test: test,
+            items,
+            operation,
+            test,
             trouble: 0,
         };
     }
@@ -114,17 +110,13 @@ pub fn solve() {
                 if l.is_empty() {
                     monkes.insert(
                         midx,
-                        Monke::new(
-                            mitems.to_owned(),
-                            operation.to_owned(),
-                            Test::new(pos, neg, disc),
-                        ),
+                        Monke::new(mitems.clone(), operation.clone(), Test::new(pos, neg, disc)),
                     );
                     continue;
                 }
                 let toks: Vec<_> = l.split_whitespace().collect();
                 if l.starts_with("Monkey") {
-                    midx = toks[1].chars().nth(0).unwrap().to_digit(10).unwrap() as usize;
+                    midx = toks[1].chars().next().unwrap().to_digit(10).unwrap() as usize;
                 } else if let Some(items) = l.strip_prefix("  Starting items: ") {
                     mitems = items
                         .split(',')
@@ -156,11 +148,7 @@ pub fn solve() {
     }
     monkes.insert(
         midx,
-        Monke::new(
-            mitems.to_owned(),
-            operation.to_owned(),
-            Test::new(pos, neg, disc),
-        ),
+        Monke::new(mitems, operation, Test::new(pos, neg, disc)),
     );
     println!("{:?}", monkes.len());
     let lcm = monkes.iter().fold(1, |acc, m| acc * m.test.disc);
@@ -172,14 +160,14 @@ pub fn solve() {
         }
     }
     for m in &monkes {
-        println!("{:?}", m);
+        println!("{m:?}");
     }
     println!("---------");
     monkes.sort_by_key(|monke| monke.trouble);
     let mut tot = 1;
-    for i in monkes.len() - 2..monkes.len() {
-        println!("{:?}", monkes[i]);
-        tot *= monkes[i].trouble;
+    for minke in monkes.iter().skip(monkes.len() - 2) {
+        println!("{minke:?}");
+        tot *= minke.trouble;
     }
     println!("{tot}");
 }

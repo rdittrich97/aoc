@@ -6,10 +6,7 @@ pub fn solve() {
     let elves: Vec<&str> = cals.split("\n\n").collect();
     let mut big: [isize; 3] = [0, 0, 0];
     for elf in &elves {
-        let v = elf
-            .split('\n')
-            .map(|s| s.parse::<isize>().unwrap())
-            .fold(0, |a, b| a + b);
+        let v = elf.split('\n').map(|s| s.parse::<isize>().unwrap()).sum();
         let min = big.iter().min().unwrap();
         if v > *min {
             let midx = big.iter().position(|&x| x == *min).unwrap();
@@ -17,5 +14,5 @@ pub fn solve() {
         }
     }
     println!("{:?}", big.iter().sum::<isize>());
-    println!("{:?}", big);
+    println!("{big:?}");
 }

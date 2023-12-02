@@ -37,7 +37,7 @@ fn min<T: Ord>(v1: T, v2: T) -> T {
 
 const DIRECTIONS: [(isize, isize); 3] = [(0, 1), (-1, 1), (1, 1)];
 
-fn move_sand(sand: &Point, map: &Vec<Vec<char>>) -> Option<(isize, isize)> {
+fn move_sand(sand: &Point, map: &[Vec<char>]) -> Option<(isize, isize)> {
     for dir in DIRECTIONS {
         let res = map
             .get((sand.y as isize + dir.1) as usize)
@@ -54,7 +54,7 @@ fn move_sand(sand: &Point, map: &Vec<Vec<char>>) -> Option<(isize, isize)> {
     return None;
 }
 
-fn move_sandp2(sand: &Point, map: &Vec<Vec<char>>) -> Option<(isize, isize)> {
+fn move_sandp2(sand: &Point, map: &[Vec<char>]) -> Option<(isize, isize)> {
     for dir in DIRECTIONS {
         let res = map
             .get((sand.y as isize + dir.1) as usize)
@@ -93,7 +93,7 @@ pub fn solve() {
                     intrs.last_mut().unwrap().push(Point {
                         x: dirs[0],
                         y: dirs[1],
-                    })
+                    });
                 }
             }
             Err(err) => {

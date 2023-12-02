@@ -52,11 +52,11 @@ pub fn solve() {
         }
         totals.push(v);
     }
-    let sum = totals.iter().filter(|v| *v <= &100000).sum::<usize>();
-    let space = 30000000 - (70000000 - totals.last().unwrap());
+    let sum = totals.iter().filter(|v| *v <= &100_000).sum::<usize>();
+    let space = 30_000_000 - (70_000_000 - totals.last().unwrap());
     let p2 = totals.iter().filter(|v| *v >= &space).min();
-    println!("{:?}", dstack);
-    println!("{:?}", totals);
-    println!("{:?}", sum);
-    println!("{:?}", p2);
+    println!("{dstack:?}");
+    println!("{totals:?}");
+    println!("{sum:?}");
+    println!("{p2:?}");
 }

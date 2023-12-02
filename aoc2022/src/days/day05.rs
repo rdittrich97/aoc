@@ -21,55 +21,52 @@ pub fn solve() {
                     mode = true;
                     continue;
                 }
-                match mode {
-                    false => {
-                        let tt: Vec<_> = l.chars().skip(1).step_by(4).collect();
-                        if *tt.get(0).unwrap() == '1' {
-                            continue;
-                        }
-                        if first {
-                            stack.reserve(tt.len());
-                            for _ in 0..tt.len() {
-                                stack.push(Vec::new());
-                            }
-                            first = false;
-                        }
-                        tt.iter()
-                            .enumerate()
-                            .filter(|(_, v)| **v != ' ')
-                            .for_each(|(i, v)| stack[i].push(*v));
+                if mode {
+                    let toks: Vec<_> = l.split_whitespace().collect();
+                    let src = toks.get(3).unwrap().parse::<usize>().unwrap();
+                    let dst = toks.get(5).unwrap().parse::<usize>().unwrap();
+                    let mv = toks.get(1).unwrap().parse::<usize>().unwrap();
+                    let mut mvd: Vec<_> = Vec::new();
+                    println!("{l:?}");
+                    println!("{stack:?}");
+                    for _ in 0..mv {
+                        mvd.push(stack.get_mut(src - 1).unwrap().remove(0));
                     }
-                    true => {
-                        let toks: Vec<_> = l.split_whitespace().collect();
-                        let src = toks.get(3).unwrap().parse::<usize>().unwrap();
-                        let dst = toks.get(5).unwrap().parse::<usize>().unwrap();
-                        let mv = toks.get(1).unwrap().parse::<usize>().unwrap();
-                        let mut mvd: Vec<_> = Vec::new();
-                        println!("{:?}", l);
-                        println!("{:?}", stack);
-                        for _ in 0..mv {
-                            mvd.push(stack.get_mut(src - 1).unwrap().remove(0));
-                        }
-                        stack.get_mut(dst - 1).unwrap().splice(0..0, mvd);
-                        println!("{:?}", stack);
-                        /* part1
-                        let toks: Vec<_> = l.split_whitespace().collect();
-                        let src = toks.get(3).unwrap().parse::<usize>().unwrap();
-                        let dst = toks.get(5).unwrap().parse::<usize>().unwrap();
-                        for _ in 0..toks.get(1).unwrap().parse::<usize>().unwrap() {
-                            let mv = stack.get_mut(src - 1).unwrap().remove(0);
-                            stack.get_mut(dst - 1).unwrap().insert(0, mv);
-                        }
-                        */
+                    stack.get_mut(dst - 1).unwrap().splice(0..0, mvd);
+                    println!("{stack:?}");
+                    /* part1
+                    let toks: Vec<_> = l.split_whitespace().collect();
+                    let src = toks.get(3).unwrap().parse::<usize>().unwrap();
+                    let dst = toks.get(5).unwrap().parse::<usize>().unwrap();
+                    for _ in 0..toks.get(1).unwrap().parse::<usize>().unwrap() {
+                        let mv = stack.get_mut(src - 1).unwrap().remove(0);
+                        stack.get_mut(dst - 1).unwrap().insert(0, mv);
                     }
+                    */
+                } else {
+                    let tt: Vec<_> = l.chars().skip(1).step_by(4).collect();
+                    if *tt.first().unwrap() == '1' {
+                        continue;
+                    }
+                    if first {
+                        stack.reserve(tt.len());
+                        for _ in 0..tt.len() {
+                            stack.push(Vec::new());
+                        }
+                        first = false;
+                    }
+                    tt.iter()
+                        .enumerate()
+                        .filter(|(_, v)| **v != ' ')
+                        .for_each(|(i, v)| stack[i].push(*v));
                 }
             }
-            Err(err) => println!("{:?}", err),
+            Err(err) => println!("{err:?}"),
         }
     }
     for s in &stack {
-        print!("{:?}", s.get(0).unwrap());
+        print!("{:?}", s.first().unwrap());
     }
     println!();
-    println!("{:?}", stack)
+    println!("{stack:?}");
 }

@@ -28,7 +28,7 @@ fn dist(p1: &Point, p2: &Point) -> Point {
 }
 
 fn range(p1: &Point, p2: &Point) -> isize {
-    let mdist = dist(&p1, &p2);
+    let mdist = dist(p1, p2);
     return mdist.x + mdist.y;
 }
 
@@ -37,11 +37,11 @@ pub fn solve() {
     let reader = read_file("./src/days/day15.txt");
     //let mut lpos: HashSet<isize> = HashSet::new();
     let mut lpos: HashSet<Point> = HashSet::new();
-    let target = 2000000;
+    let target = 2_000_000;
 
     //let max = 20;
     let min = 0;
-    let max = 4000000;
+    let max = 4_000_000;
     let mut sensors: Vec<Sensor> = Vec::new();
     for line in reader.lines() {
         match line {
@@ -60,7 +60,7 @@ pub fn solve() {
                 sensors.push(Sensor {
                     pos: sensor,
                     range: beeg,
-                })
+                });
                 /* part 1
                 if sensor.y == target {
                     lpos.insert(sensor.x);
@@ -114,12 +114,12 @@ pub fn solve() {
                     found = true;
                 }
             }
-            if !found {
-                distress = Point { x: i, y: j };
-                println!("scary {:?}", distress);
-                j += 1;
-            } else {
+            if found {
                 j += jump;
+            } else {
+                distress = Point { x: i, y: j };
+                println!("scary {distress:?}");
+                j += 1;
             }
             iters += 1;
         }

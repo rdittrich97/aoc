@@ -10,37 +10,37 @@ fn read_file(path: &str) -> io::BufReader<fs::File> {
 
 #[derive(Debug, Clone)]
 enum EPacket {
-    number(isize),
-    array(Vec<EPacket>),
+    Number(isize),
+    Array(Vec<EPacket>),
 }
 
 fn rparse(s: &str, idx: usize) -> (EPacket, usize) {
     let mut i: usize = idx;
-    let mut temp: String = "".to_owned();
-    let mut root = EPacket::array(Vec::new());
+    let mut temp: String = String::new();
+    let mut root = EPacket::Array(Vec::new());
     while i < s.len() {
         let ch = s.chars().nth(i).unwrap();
         match ch {
             '[' => {
-                if let EPacket::array(arr) = &mut root {
-                    arr.push(EPacket::number(temp.parse::<isize>().unwrap()))
+                if let EPacket::Array(arr) = &mut root {
+                    arr.push(EPacket::Number(temp.parse::<isize>().unwrap()));
                 }
             }
             ']' => {
                 if !temp.is_empty() {
-                    if let EPacket::array(arr) = &mut root {
-                        arr.push(EPacket::number(temp.parse::<isize>().unwrap()))
+                    if let EPacket::Array(arr) = &mut root {
+                        arr.push(EPacket::Number(temp.parse::<isize>().unwrap()));
                     }
                 }
                 return (root, i + 1);
             }
             ',' => {
                 if !temp.is_empty() {
-                    if let EPacket::array(arr) = &mut root {
-                        arr.push(EPacket::number(temp.parse::<isize>().unwrap()))
+                    if let EPacket::Array(arr) = &mut root {
+                        arr.push(EPacket::Number(temp.parse::<isize>().unwrap()));
                     }
                 }
-                temp = "".to_owned();
+                temp = String::new();
             }
             '0'..='9' => temp.push(ch),
             _ => {
@@ -56,7 +56,7 @@ fn rparse(s: &str, idx: usize) -> (EPacket, usize) {
 
 fn is_rpacket_ordered(p1: &EPacket, p2: &EPacket) -> Option<bool> {
     match (p1, p2) {
-        (EPacket::number(num), EPacket::number(num2)) => {
+        (EPacket::Number(num), EPacket::Number(num2)) => {
             if num < num2 {
                 return Some(true);
             }
@@ -67,7 +67,7 @@ fn is_rpacket_ordered(p1: &EPacket, p2: &EPacket) -> Option<bool> {
                 return None;
             }
         }
-        (EPacket::array(arr), EPacket::array(arr2)) => {
+        (EPacket::Array(arr), EPacket::Array(arr2)) => {
             let mut i = 0;
             let mut j = 0;
             while i < arr.len() && j < arr2.len() {
@@ -83,20 +83,19 @@ fn is_rpacket_ordered(p1: &EPacket, p2: &EPacket) -> Option<bool> {
                 return Some(false);
             } else if i >= arr.len() && j < arr2.len() {
                 return Some(true);
-            } else {
-                return None;
             }
+            return None;
         }
-        (EPacket::array(arr), EPacket::number(num)) => {
+        (EPacket::Array(arr), EPacket::Number(num)) => {
             return is_rpacket_ordered(
-                &EPacket::array(Vec::from_iter(arr.iter().cloned())),
-                &EPacket::array(vec![EPacket::number(*num)]),
+                &EPacket::Array(arr.clone()),
+                &EPacket::Array(vec![EPacket::Number(*num)]),
             );
         }
-        (EPacket::number(num), EPacket::array(arr)) => {
+        (EPacket::Number(num), EPacket::Array(arr)) => {
             return is_rpacket_ordered(
-                &EPacket::array(vec![EPacket::number(*num)]),
-                &EPacket::array(Vec::from_iter(arr.iter().cloned())),
+                &EPacket::Array(vec![EPacket::Number(*num)]),
+                &EPacket::Array(arr.clone()),
             );
         }
     }
@@ -141,8 +140,8 @@ fn sort(packets: &mut Vec<EPacket>, div1: usize, div2: usize) -> (usize, usize) 
 pub fn solve() {
     let reader = read_file("./src/days/day13.txt");
     let mut first = true;
-    let mut r1: EPacket = EPacket::number(0);
-    let mut r2: EPacket = EPacket::number(0);
+    let mut r1: EPacket = EPacket::Number(0);
+    let mut r2: EPacket = EPacket::Number(0);
     let mut idx: usize = 1;
     let mut rtot: usize = 0;
     let mut packets: Vec<EPacket> = Vec::new();
@@ -180,7 +179,7 @@ pub fn solve() {
     let d2 = packets.len() - 1;
     let (div1, div2) = sort(&mut packets, d1, d2);
     println!("{}", (div1 + 1) * (div2 + 1));
-    println!("rtot: {}", rtot);
+    println!("rtot: {rtot}");
 }
 
 #[cfg(test)]
