@@ -1,3 +1,4 @@
+#![allow(clippy::needless_return)]
 use itertools::Itertools;
 use std::{
     fs,
