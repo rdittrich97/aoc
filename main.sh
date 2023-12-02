@@ -45,7 +45,6 @@ use ${proj}::days::{
     day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11, day12, day13,
     day14, day15, day16, day17, day18, day19, day20, day21, day22, day23, day24, day25,
 };
-use common;
 use std::env;
 use std::error::Error;
 
@@ -88,7 +87,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         let day_solver = get_solver(day);
         total += common::time_function(day, day_solver);
     }
-    println!("Total runtime: {:.4} ms", total);
+    println!("Total runtime: {total:.4} ms");
     return Ok(());
 }
 EOL
