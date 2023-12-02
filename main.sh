@@ -100,7 +100,7 @@ EOL
 mkdir -p "${proj}/src/days/data"
 
 for day in `seq -f "%02g" 1 25`; do
-    echo $day
+    echo "making source file for $day"
     cat >"./${proj}/src/days/day${day}.rs" << EOL
 #![allow(clippy::needless_return)]
 #[allow(dead_code)]
