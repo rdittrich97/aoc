@@ -6,26 +6,25 @@ pub fn solve() {
     let numbs = [
         "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
     ];
-    for line in lines.iter() {
+    for line in &lines {
         let mut first: Option<u32> = None;
         let mut last: Option<u32> = None;
         let mut buf = String::new();
         for c in line.chars() {
-            let v: u32 = match c.to_digit(10) {
-                Some(val) => val,
-                None => {
-                    buf.push(c);
-                    let mut ret: u32 = 0;
-                    for i in 0..numbs.len() {
-                        if buf.contains(numbs[i]) {
-                            buf.clear();
-                            buf.push(c);
-                            ret = i as u32 + 1;
-                            break;
-                        }
+            let v: u32 = if let Some(val) = c.to_digit(10) {
+                val
+            } else {
+                buf.push(c);
+                let mut ret: u32 = 0;
+                for i in 0..numbs.len() {
+                    if buf.contains(numbs[i]) {
+                        buf.clear();
+                        buf.push(c);
+                        ret = i as u32 + 1;
+                        break;
                     }
-                    ret
                 }
+                ret
             };
             if v == 0 {
                 continue;
@@ -42,5 +41,5 @@ pub fn solve() {
             tot += (first.expect("first to be set") * 10) + last.expect("last to be set");
         }
     }
-    println!("{:?}", tot);
+    println!("{tot:?}");
 }

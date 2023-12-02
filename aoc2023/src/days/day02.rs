@@ -7,14 +7,14 @@ pub fn solve() {
     let mut min = [0, 0, 0];
     let mut power = 0;
     let mut bad = false;
-    for line in lines.iter() {
+    for line in &lines {
         let game: Vec<_> = line
             .replace("Game ", "")
             .replace(": ", ";")
             .replace("; ", ";")
             .replace(", ", ",")
             .split(";")
-            .map(|x| x.to_string())
+            .map(std::string::ToString::to_string)
             .collect();
         let id = game[0].parse::<u32>().unwrap();
         tot += id;
@@ -43,5 +43,5 @@ pub fn solve() {
         min = [0, 0, 0];
     }
     println!("p1: {:?} - {:?} = {:?}", tot, imp, tot - imp);
-    println!("p2: {:?}", power);
+    println!("p2: {power:?}");
 }
