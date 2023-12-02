@@ -1,4 +1,4 @@
-use std::{error::Error, fs, io, time::Instant};
+use std::{error::Error, fs, time::Instant};
 
 pub fn parse_args(args: &Vec<String>) -> Result<Vec<u8>, Box<dyn Error>> {
     if args.len() < 2 {
